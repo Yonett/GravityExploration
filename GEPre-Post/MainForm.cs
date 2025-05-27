@@ -3,7 +3,7 @@ using Microsoft.VisualBasic;
 
 namespace GEPre_Post
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         Cell[,] field = new Cell[10, 10];
         int cols = 10;
@@ -13,7 +13,7 @@ namespace GEPre_Post
 
         StringFormat drawFormat = new StringFormat();
 
-        public Form1()
+        public MainForm()
         {
             for (int i = 0; i < cols; i++)
                 for (int j = 0; j < rows; j++)
@@ -22,7 +22,6 @@ namespace GEPre_Post
             drawFormat.Alignment = StringAlignment.Center;
 
             InitializeComponent();
-            this.DoubleBuffered = true;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -112,8 +111,8 @@ namespace GEPre_Post
                                 
                     }
 
-                    this.panel1.Invalidate(cell.rect);
-                    this.panel2.Invalidate(cell.rect);
+                    this.preField.Invalidate(cell.rect);
+                    this.postField.Invalidate(cell.rect);
 
                     break;
                 }
