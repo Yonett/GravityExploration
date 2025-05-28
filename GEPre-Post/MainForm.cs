@@ -5,23 +5,40 @@ namespace GEPre_Post
 {
     public partial class MainForm : Form
     {
-        Cell[,] field = new Cell[10, 10];
-        int cols = 10;
-        int rows = 10;
+        Cell[,] field;
+        int cols = 13;
+        int rows = 9;
         int width = 80;
         int height = 40;
+        int problemCellWidth = 80;
+        int problemCellHeight = 40;
+
+        FontFamily LucidaFontFamily = new FontFamily("Lucida Console");
+        Font LucidaFont;
 
         StringFormat drawFormat = new StringFormat();
+        StringFormat verticalFormat = new StringFormat();
 
         public MainForm()
         {
+            field = new Cell[cols, rows];
             for (int i = 0; i < cols; i++)
                 for (int j = 0; j < rows; j++)
                     field[i, j] = new Cell(row: i, col: j, width: width, height: height);
 
             drawFormat.Alignment = StringAlignment.Center;
+            verticalFormat.FormatFlags = StringFormatFlags.DirectionVertical;
+
+            LucidaFont = new Font(
+               LucidaFontFamily,
+               14,
+               FontStyle.Regular,
+               GraphicsUnit.Point);
 
             InitializeComponent();
+
+            numericUpDown1.Value = problemCellWidth;
+            numericUpDown2.Value = problemCellHeight;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -59,9 +76,9 @@ namespace GEPre_Post
                 {
                     using (var brush = new SolidBrush(c.color))
                     {
-                        e.Graphics.FillRectangle(brush, c.rect);
+                        g.FillRectangle(brush, c.rect);
                         if (!c.empty)
-                            e.Graphics.DrawString($"{c.value:e2}", this.Font, Brushes.Black, c.rect, drawFormat);
+                            g.DrawString($"{c.value:e2}", this.Font, Brushes.Black, c.rect, drawFormat);
                     }
                 }
                 else
@@ -108,15 +125,54 @@ namespace GEPre_Post
                                 }
                             }
                         }
-                                
+
                     }
 
                     this.preField.Invalidate(cell.rect);
-                    this.postField.Invalidate(cell.rect);
+                    //this.postField.Invalidate(cell.rect);
 
                     break;
                 }
             }
+        }
+
+        private void panel2_Paint_1(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            for (int i = 0; i < cols + 1; i++)
+            {
+                g.DrawString($"{(problemCellWidth * i):d}", this.Font, Brushes.Black, (i > 0 ? 20 : 0) + width * i, 0);
+            }
+
+            for (int i = 1; i < rows + 1; i++)
+            {
+                g.DrawString($"{(problemCellHeight * i):d}", this.Font, Brushes.Black, 0, 15 + height * i);
+            }
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            problemCellWidth = (int)numericUpDown1.Value;
+            panel1.Invalidate();
+            panel2.Invalidate();
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            problemCellHeight = (int)numericUpDown2.Value;
+            panel1.Invalidate();
+            panel2.Invalidate();
+        }
+
+        private void panel6_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawString("Input", LucidaFont, Brushes.Black, 0, 185, verticalFormat);
+        }
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawString("Output", LucidaFont, Brushes.Black, 0, 185, verticalFormat);
         }
     }
 
