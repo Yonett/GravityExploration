@@ -157,6 +157,8 @@
             C[3, 3] = gamma * 3 + gamma + gamma + gamma;
         }
 
+        // # TEST YAML
+
         public void ComputeSolver(int size, double alpha, Matrix C, double gzMax, string str1, string str2)
         {
             solveDensity = ComputeReverse(size, alpha, C);
